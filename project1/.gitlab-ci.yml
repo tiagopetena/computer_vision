@@ -1,0 +1,40 @@
+image: adnrv/opencv
+
+# Some variables to make your CI DRY
+# variables:
+#   FILE: "kmeans"
+
+before_script:
+  # Execute any scripts here before running your code
+  - sh download.sh
+
+stages: 
+  - exec
+  - build
+
+# This stage executes our program (previously compiled)
+exec: 
+  stage: exec
+  
+  script:
+    # Note that instead of the makefile you can just call your executable here
+    - pip3 install scikit-learn
+    - python3 src/test.py
+  artifacts:
+    paths:
+      # We need to publish our results so others (the professor and assistants) can check them
+      # See the code to identify the name (this file is made by you as a result of executing the 'kmeans' program)
+      
+
+
+# # This stage builds your report too
+report:
+  image: adnrv/texlive:full
+  stage: build
+  script:
+    - cd report
+    - latexmk -pdf -pdflatex="pdflatex --shell-escape %O %S" main
+    - mv main.pdf ../report.pdf
+  artifacts:
+    paths:
+      - report.pdf

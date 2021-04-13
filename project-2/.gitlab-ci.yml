@@ -1,0 +1,24 @@
+image: adnrv/opencv
+ 
+stages: 
+    - exec
+    - build
+
+exec: 
+    stage: exec
+    script:
+        - chmod +x src/download_data.sh
+        - ./src/download_data.sh
+        - python3 src/main.py
+
+report:
+  image: adnrv/texlive:full
+  stage: build
+  script:
+    - mkdir output
+    - cd input/report
+    - latexmk -pdf -pdflatex="pdflatex --shell-escape %O %S" main
+    - mv main.pdf ../../output/
+  artifacts:
+    paths:
+      - output/main.pdf

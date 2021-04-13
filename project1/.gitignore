@@ -1,0 +1,9 @@
+*.pyc
+
+# project dataset
+*.tgz 
+input/BSDS300/*
+input/model1.pkl
+input/model2.pkl
+input/model3.pkl
+input/model4.pkl
